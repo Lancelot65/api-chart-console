@@ -17,11 +17,7 @@ private:
     float last_price = 0.0f;
     float cumulative_volume = 0.0f;
 
-    CandleSet()
-    {
-        this->_compute_all();
-    }
-
+public:
     void _compute_all()
     {
         if (this->candles.empty())
@@ -90,6 +86,26 @@ private:
         this->candles = _candles;
         this->_compute_all();
         return;
+    }
+
+    Candles getCandles()
+    {
+        return this->candles;
+    }
+
+    void reset()
+    {
+        this->candles.clear();
+    }
+
+    float getMin_price()
+    {
+        return this->min_price;
+    }
+
+    float getMax_price()
+    {
+        return this->max_price;
     }
 
 

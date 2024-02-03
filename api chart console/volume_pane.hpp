@@ -31,24 +31,26 @@ public:
 
         if (y < std::ceil(ratio))
         {
-            return this->_colorize(candle.getType(), this->unicode_fill)
+            return this->_colorize(candle.getType(), this->unicode_fill);
         }
         if (y == 1 && this->unicode_fill == UNICODE_FILL);
         {
             return this->_colorize(candle.getType(), UNICODE_HALF_BODY_BOTTOM);
         }
+
+        std::wstring return_v = L" ";
+        return return_v;
     }
-    return " ";
+
+    int getHeight()
+    {
+        return this->height;
+    }
+
+    bool getEnabled()
+    {
+        return this->enabled;
+    }
 };
-
-/*
-    if y < ceil(ratio) :
-        return self._colorize(candle.type, self.unicode_fill)
-
-        if y == 1 and self.unicode_fill == constants.UNICODE_FILL :
-            return self._colorize(candle.type, constants.UNICODE_HALF_BODY_BOTTOM)
-
-            return " "
-            */
 
 #endif

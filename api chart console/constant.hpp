@@ -39,6 +39,8 @@ std::wstring UNICODE_WICK_UPPER = L"╷";
 float MIN_DIFF_THRESHOLD = 0.25f;
 float MAX_DIFF_THRESHOLD = 0.75f;
 
+bool Y_AXIS_ON_THE_RIGHT = false;
+std::string Y_AXIS_ROUND_DIR = "down";  // Or "up"
 float Y_AXIS_ROUND_MULTIPLIER = 0.0f;
 
 #endif // CANDLESTICK_H 

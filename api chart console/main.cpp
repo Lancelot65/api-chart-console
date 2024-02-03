@@ -1,8 +1,10 @@
 ﻿#include <iostream>
-#include "constant.h"
+#include "constant.hpp"
 #include <io.h>
 #include <fcntl.h>
 #include "color.hpp"
+
+// https://github.com/BoboTiG/py-candlestick-chart.git
 
 class UnicodeOutput {
 public:

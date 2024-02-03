@@ -75,5 +75,6 @@ public:
 };
 
 using Candles = std::vector<Candle>;
+using empty_candle = Candles;
 
 #endif

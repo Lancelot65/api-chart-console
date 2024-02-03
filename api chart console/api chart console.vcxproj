@@ -134,8 +134,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="candle.hpp" />
+    <ClInclude Include="chart_data.hpp" />
     <ClInclude Include="constant.hpp" />
+    <ClInclude Include="utils.hpp" />
     <ClInclude Include="volume_pane.hpp" />
+    <ClInclude Include="y_axis.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
