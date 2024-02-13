@@ -25,7 +25,9 @@ private:
 
 public:
     chart(OHLCV _data) :
-        Parametre(this->limit, 0, this->width_screen - this->limit, this->height_screen, this->width_screen, this->height_screen), Graphique(0, 0, this->limit, this->height_screen, _data)
+        Parametre(this->limit, 0, this->width_screen - this->limit, this->height_screen, this->width_screen, this->height_screen), Graphique(0, 0, float(this->limit), float(this->height_screen), _data)
+          
+    
     {
         this->cursor_default.loadFromSystem(sf::Cursor::Arrow);
         this->cursor_resize.loadFromSystem(sf::Cursor::SizeHorizontal);
@@ -34,6 +36,9 @@ public:
     void loop()
     {
         sf::RenderWindow window(sf::VideoMode(this->width_screen, this->height_screen), "test", sf::Style::Close | sf::Style::Titlebar);
+
+        // this->Parametre.create_parametre(window);
+
 
         while (window.isOpen())
         {
@@ -109,13 +114,13 @@ public:
         else if (this->Parametre.collide(x, y))
             if (!this->Parametre.get_etat_view())
             {
-                this->Graphique.set_size(0, 0, this->width_screen, this->height_screen);
+                this->Graphique.set_size(0.0f, 0.0f, float(this->width_screen), float(this->height_screen));
             }
             else
             {
-                this->Graphique.set_size(0, 0, this->limit, this->height_screen);
+                this->Graphique.set_size(0.0f, 0.0f, float(this->limit), float(this->height_screen));
             }
-        else if (this->Graphique.collide(x, y))
+        else if (this->Graphique.collide(float(x), float(y)))
         {
             return;
         }
@@ -127,7 +132,7 @@ public:
         {
             temp_click_resize_etat = false;
             this->limit = this->Parametre.check_size(x);
-            this->Graphique.set_size(0, 0, this->limit, this->height_screen);
+            this->Graphique.set_size(0.0f, 0.0f, float(this->limit), float(this->height_screen));
             this->Parametre.set_size(this->limit, 0, this->limit, this->height_screen);
         }
     }
@@ -137,7 +142,7 @@ public:
         if (temp_click_resize_etat)
         {
             this->limit = this->Parametre.check_size(x);
-            this->Graphique.set_size(0, 0, this->limit, this->height_screen);
+            this->Graphique.set_size(0.0f, 0.0f, float(this->limit), float(this->height_screen));
             this->Parametre.set_size(this->limit, 0, this->limit, this->height_screen);
         }
     }

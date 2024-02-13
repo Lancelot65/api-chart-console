@@ -6,6 +6,8 @@
 #include <SFML/Graphics.hpp>
 #include <outil_requete.hpp>
 #include <algorithm>
+#include "widget.hpp"
+
 
 static bool collision_point(sf::RectangleShape& rect, float x_point, float y_point)
 {
@@ -29,45 +31,50 @@ private:
     sf::VertexArray croix_line;
     sf::VertexArray liste_line;
 
+    std::vector<Combobox> liste_combobox;
 
 public:
     parametre(int x, int y, int width, int height, int _screen_width, int _screen_height) :
     screen_height(_screen_height), screen_width(_screen_width)
     {
-        this->rect.setPosition(sf::Vector2f(x, y));
-        this->rect.setSize(sf::Vector2f(width, height));
+        this->rect.setPosition(sf::Vector2f(float(x), float(y)));
+        this->rect.setSize(sf::Vector2f(float(width), float(height)));
         this->rect.setFillColor(sf::Color(0, 0, 0));
      
-        this->rect_croix.setPosition(sf::Vector2f(this->screen_width - 13, 5));
-        this->rect_croix.setSize(sf::Vector2f(10, 10));
+        this->rect_croix.setPosition(sf::Vector2f(float(this->screen_width - 13), 5.0f));
+        this->rect_croix.setSize(sf::Vector2f(10.0f, 10.0f));
 
 
         this->croix_line.setPrimitiveType(sf::Lines);
         this->liste_line.setPrimitiveType(sf::Lines);
 
-        this->croix_line.append(sf::Vertex(sf::Vector2f(this->screen_width - 5, 5), sf::Color(255, 255, 255)));
-        this->croix_line.append(sf::Vertex(sf::Vector2f(this->screen_width - 15, 15), sf::Color(255, 255, 255)));
+        this->croix_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 5), 5.0f), sf::Color(255, 255, 255)));
+        this->croix_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 15), 15.0f), sf::Color(255, 255, 255)));
 
-        this->croix_line.append(sf::Vertex(sf::Vector2f(this->screen_width - 15, 5), sf::Color(255, 255, 255)));
-        this->croix_line.append(sf::Vertex(sf::Vector2f(this->screen_width - 5, 15), sf::Color(255, 255, 255)));
+        this->croix_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 15), 5.0f), sf::Color(255, 255, 255)));
+        this->croix_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 5), 15.0f), sf::Color(255, 255, 255)));
 
     
-        this->liste_line.append(sf::Vertex(sf::Vector2f(this->screen_width - 5, 5), sf::Color(0, 0, 0)));
-        this->liste_line.append(sf::Vertex(sf::Vector2f(this->screen_width - 15, 5), sf::Color(0, 0, 0)));
+        this->liste_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 5), 5.0f), sf::Color(0, 0, 0)));
+        this->liste_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 15), 5.0f), sf::Color(0, 0, 0)));
 
-        this->liste_line.append(sf::Vertex(sf::Vector2f(this->screen_width - 5, 9), sf::Color(0, 0, 0)));
-        this->liste_line.append(sf::Vertex(sf::Vector2f(this->screen_width - 15, 9), sf::Color(0, 0, 0)));
+        this->liste_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 5), 9.0f), sf::Color(0, 0, 0)));
+        this->liste_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 15), 9.0f), sf::Color(0, 0, 0)));
 
-        this->liste_line.append(sf::Vertex(sf::Vector2f(this->screen_width - 5, 13), sf::Color(0, 0, 0)));
-        this->liste_line.append(sf::Vertex(sf::Vector2f(this->screen_width - 15, 13), sf::Color(0, 0, 0)));
+        this->liste_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 5), 13.0f), sf::Color(0, 0, 0)));
+        this->liste_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 15), 13.0f), sf::Color(0, 0, 0)));
     }
 
-    void show(sf::RenderWindow& window)
+    void show(sf::RenderWindow &window)
     {
         if (this->etat_view)
         {
             window.draw(this->rect);
             window.draw(this->croix_line);
+            for (auto combobox : liste_combobox)
+            {
+                combobox.show();
+            }
         }
         else
         {
@@ -77,12 +84,10 @@ public:
 
     bool collide(int x, int y)
     {
-        if (collision_point(this->rect, x, y))
+        if (collision_point(this->rect, float(x), float(y)))
         {
-            std::cout << "parametre";
-            if (collision_point(this->rect_croix, x, y))
+            if (collision_point(this->rect_croix, float(x), float(y)))
             {
-                std::cout << "crois";
                 this->etat_view = !this->etat_view;
                 return true;
             }
@@ -105,12 +110,19 @@ public:
 
     void set_size(int x, int y, int width, int height)
     {
-        this->rect.setSize(sf::Vector2f(width, height));
-        this->rect.setPosition(sf::Vector2f(x, y));
+        this->rect.setSize(sf::Vector2f(float(width), float(height)));
+        this->rect.setPosition(sf::Vector2f(float(x), float(y)));
     }
 
     bool get_etat_view()
     {
         return this->etat_view;
+    }
+
+    void create_parametre(sf::RenderWindow& window)
+    {
+        std::vector <std::string> options = { "BTCUSDT", "EURUSD" };
+        Combobox combobox(this->rect.getPosition().x + 10, 10, 40, 8, options, &window);
+        this->liste_combobox.push_back(combobox);
     }
 };

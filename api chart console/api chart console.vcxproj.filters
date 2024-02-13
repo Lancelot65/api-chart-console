@@ -38,10 +38,8 @@
     <ClInclude Include="parametre.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="data.csv">
-      <Filter>Fichiers sources</Filter>
-    </None>
+    <ClInclude Include="widget.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

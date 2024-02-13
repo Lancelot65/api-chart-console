@@ -148,9 +148,7 @@
     <ClInclude Include="chart.hpp" />
     <ClInclude Include="graphique.hpp" />
     <ClInclude Include="parametre.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="data.csv" />
+    <ClInclude Include="widget.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
