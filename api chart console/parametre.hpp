@@ -6,13 +6,36 @@
 #include <SFML/Graphics.hpp>
 #include <outil_requete.hpp>
 #include <algorithm>
-#include "widget.hpp"
-
 
 static bool collision_point(sf::RectangleShape& rect, float x_point, float y_point)
 {
     return (rect.getPosition().x < x_point && x_point < rect.getPosition().x + rect.getSize().x && rect.getPosition().y < y_point && y_point < rect.getPosition().y + rect.getSize().y);
 }
+
+class carre
+{
+private:
+    sf::RectangleShape rect;
+public:
+    carre(float x, float y, float width, float height) :
+        rect(sf::Vector2f(width, height))
+        {
+        this->rect.setPosition(sf::Vector2f(x, y));
+        }
+
+    void draw(sf::RenderWindow &window)
+    {
+        window.draw(this->rect);
+    }
+
+    void collide(float x, float y)
+    {
+        if (collision_point(this->rect, x, y))
+        {
+            std::cout << "click";
+        }
+    }
+};
 
 class parametre
 {
@@ -31,16 +54,15 @@ private:
     sf::VertexArray croix_line;
     sf::VertexArray liste_line;
 
-    std::vector<Combobox> liste_combobox;
-
+    carre box;
 public:
     parametre(int x, int y, int width, int height, int _screen_width, int _screen_height) :
-    screen_height(_screen_height), screen_width(_screen_width)
+        screen_height(_screen_height), screen_width(_screen_width), box(_screen_width - 20, 30, 20, 10)
     {
         this->rect.setPosition(sf::Vector2f(float(x), float(y)));
         this->rect.setSize(sf::Vector2f(float(width), float(height)));
         this->rect.setFillColor(sf::Color(0, 0, 0));
-     
+
         this->rect_croix.setPosition(sf::Vector2f(float(this->screen_width - 13), 5.0f));
         this->rect_croix.setSize(sf::Vector2f(10.0f, 10.0f));
 
@@ -54,7 +76,7 @@ public:
         this->croix_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 15), 5.0f), sf::Color(255, 255, 255)));
         this->croix_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 5), 15.0f), sf::Color(255, 255, 255)));
 
-    
+
         this->liste_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 5), 5.0f), sf::Color(0, 0, 0)));
         this->liste_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 15), 5.0f), sf::Color(0, 0, 0)));
 
@@ -65,16 +87,13 @@ public:
         this->liste_line.append(sf::Vertex(sf::Vector2f(float(this->screen_width - 15), 13.0f), sf::Color(0, 0, 0)));
     }
 
-    void show(sf::RenderWindow &window)
+    void show(sf::RenderWindow& window)
     {
         if (this->etat_view)
         {
             window.draw(this->rect);
             window.draw(this->croix_line);
-            for (auto combobox : liste_combobox)
-            {
-                combobox.show();
-            }
+            box.draw(window);
         }
         else
         {
@@ -91,6 +110,7 @@ public:
                 this->etat_view = !this->etat_view;
                 return true;
             }
+            this->box.collide(x, y);
         }
         return false;
     }
@@ -117,12 +137,5 @@ public:
     bool get_etat_view()
     {
         return this->etat_view;
-    }
-
-    void create_parametre(sf::RenderWindow& window)
-    {
-        std::vector <std::string> options = { "BTCUSDT", "EURUSD" };
-        Combobox combobox(this->rect.getPosition().x + 10, 10, 40, 8, options, &window);
-        this->liste_combobox.push_back(combobox);
     }
 };

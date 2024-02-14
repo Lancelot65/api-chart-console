@@ -37,9 +37,6 @@ public:
     {
         sf::RenderWindow window(sf::VideoMode(this->width_screen, this->height_screen), "test", sf::Style::Close | sf::Style::Titlebar);
 
-        // this->Parametre.create_parametre(window);
-
-
         while (window.isOpen())
         {
             sf::Event event;

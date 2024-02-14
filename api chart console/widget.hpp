@@ -164,12 +164,11 @@ class Button
 private:
     sf::RectangleShape m_shape;
     sf::Text m_text;
-    std::function<void()> m_onClick;
     sf::Color color;
     sf::Color outine_color;
 public:
-    Button(float x, float y, float width, float height, std::string text, sf::Font& font, std::function<void()> onClick, sf::Color color, sf::Color outine_color) :
-        m_shape(sf::Vector2f(width, height)), m_text(text, font), m_onClick(onClick), color(color), outine_color(outine_color)
+    Button(float x, float y, float width, float height, std::string text, sf::Font& font, sf::Color color, sf::Color outine_color) :
+        m_shape(sf::Vector2f(width, height)), m_text(text, font), color(color), outine_color(outine_color)
     {
         this->m_shape.setPosition(x, y);
         this->m_text.setPosition(x + (width - m_text.getLocalBounds().width) / 2, y + (height - m_text.getLocalBounds().height) / 2);
@@ -190,11 +189,7 @@ public:
     void moussepress(sf::Event event) {
         if (event.mouseButton.button == sf::Mouse::Left)
         {
-            sf::Vector2i position(event.mouseButton.x, event.mouseButton.y);
-            if (collision_point(this->m_shape, position))
-            {
-                m_onClick();
-            }
+            std::cout << "click";
         }
     }
 };
