@@ -139,16 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="chart.cpp" />
     <ClCompile Include="graphique.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="parametre.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="chart.hpp" />
     <ClInclude Include="graphique.hpp" />
-    <ClInclude Include="parametre.hpp" />
-    <ClInclude Include="widget.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,4 @@
 ﻿#include "graphique.hpp"
-#include "parametre.hpp"
 #include <SFML/Graphics.hpp>
 #include <crypto.hpp>
 
@@ -11,11 +10,9 @@
 class chart
 {
 private:
-    int width_screen = 1280;
-    int height_screen = 720;
+    float width_screen = 1280;
+    float height_screen = 720;
 
-    int limit = 1200;
-    parametre Parametre;
     graphique Graphique;
 
     sf::Cursor cursor_resize;
@@ -25,58 +22,48 @@ private:
 
 public:
     chart(OHLCV _data) :
-        Parametre(this->limit, 0, this->width_screen - this->limit, this->height_screen, this->width_screen, this->height_screen), Graphique(0, 0, float(this->limit), float(this->height_screen), _data)
-          
-    
-    {
-        this->cursor_default.loadFromSystem(sf::Cursor::Arrow);
-        this->cursor_resize.loadFromSystem(sf::Cursor::SizeHorizontal);
-    }
+        Graphique(0, 0, this->width_screen, this->height_screen, _data) {}
 
     void loop()
     {
-        sf::RenderWindow window(sf::VideoMode(this->width_screen, this->height_screen), "test", sf::Style::Close | sf::Style::Titlebar);
+        sf::RenderWindow window(sf::VideoMode(u_int(this->width_screen), u_int(this->height_screen)), "candlestick chart", sf::Style::Close | sf::Style::Titlebar);
+
+        sf::Image icon;
+        icon.loadFromFile("logo.png");
+        
+        window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
+        int i = 0;
 
         while (window.isOpen())
         {
             sf::Event event;
-            while (window.pollEvent(event)) {
-                if (event.type == sf::Event::Closed)
-                    window.close();
-                if (event.type == sf::Event::MouseMoved)
-                {
-                    this->on_mouse_motion(window);
-                }
-
-                if (event.type == sf::Event::MouseButtonPressed)
-                {
-                    if (event.mouseButton.button == sf::Mouse::Left)
-                    {
-                        int x = event.mouseButton.x;
-                        int y = event.mouseButton.y;
-                        this->on_mouse_press(x, y);
-                    }
-                }
-                
-                
-
-                if (event.type == sf::Event::MouseButtonReleased)
-                {
-                    if (event.mouseButton.button == sf::Mouse::Left)
-                    {
-                        on_mouse_release(event.mouseButton.x);
-                    }
-                }
-            }
-
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            while (window.pollEvent(event))
             {
-                this->on_mouse_drag(sf::Mouse::getPosition(window).x);
+                switch (event.type)
+                {
+                case sf::Event::Closed:
+                    window.close();
+                    break;
+                case sf::Event::KeyPressed:
+
+                    if (event.key.control)
+                    {
+                        bool fPressed = event.key.code == sf::Keyboard::F;
+
+                        if (fPressed)
+                        {
+                            Graphique.set_theme(Dark);
+                        }
+                    }
+                    break;
+                }
             }
+
+            window.clear(sf::Color::White);
 
             this->draw(window);
-            
-            
+
 
             window.display();
         }
@@ -85,69 +72,12 @@ public:
     void draw(sf::RenderWindow& window)
     {
         this->Graphique.show(window);
-        this->Parametre.show(window);
-
-    }
-
-    void on_mouse_motion(sf::RenderWindow& window)
-    {
-        int x = sf::Mouse::getPosition(window).x;
-        if (x > this->limit - 3 && x < this->limit + 3)
-        {
-            window.setMouseCursor(this->cursor_resize);
-        }
-        else
-        {
-            window.setMouseCursor(this->cursor_default);
-        }
-    }
-
-    void on_mouse_press(int x, int y)
-    {
-        if (x > this->limit - 3 and x < this->limit + 3)
-        {
-            this->temp_click_resize_etat = true;
-        }
-        else if (this->Parametre.collide(x, y))
-            if (!this->Parametre.get_etat_view())
-            {
-                this->Graphique.set_size(0.0f, 0.0f, float(this->width_screen), float(this->height_screen));
-            }
-            else
-            {
-                this->Graphique.set_size(0.0f, 0.0f, float(this->limit), float(this->height_screen));
-            }
-        else if (this->Graphique.collide(float(x), float(y)))
-        {
-            return;
-        }
-    }
-
-    void on_mouse_release(int x)
-    {
-        if (temp_click_resize_etat)
-        {
-            temp_click_resize_etat = false;
-            this->limit = this->Parametre.check_size(x);
-            this->Graphique.set_size(0.0f, 0.0f, float(this->limit), float(this->height_screen));
-            this->Parametre.set_size(this->limit, 0, this->limit, this->height_screen);
-        }
-    }
-
-    void on_mouse_drag(int x)
-    {
-        if (temp_click_resize_etat)
-        {
-            this->limit = this->Parametre.check_size(x);
-            this->Graphique.set_size(0.0f, 0.0f, float(this->limit), float(this->height_screen));
-            this->Parametre.set_size(this->limit, 0, this->limit, this->height_screen);
-        }
     }
 };
 
 int main()
 {
-    OHLCV data = load_crypto(datetime_to_milliseconds("2024-02-01"), datetime_to_milliseconds("2024-02-11"), "BTCUSDT", "1h");
+    OHLCV data = load_crypto(datetime_to_milliseconds("2024-02-01"), datetime_to_milliseconds("2024-02-02"), "BTCUSDT", "1h");
     chart obj(data);
     obj.loop();
 

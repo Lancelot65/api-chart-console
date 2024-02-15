@@ -1,9 +1,41 @@
 #include "graphique.hpp"
 
-sf::Color DARK = sf::Color(0, 0, 0);
-sf::Color WHITE = sf::Color(238, 238, 238);
-sf::Color RED = sf::Color(242, 54, 69);
-sf::Color GREEN = sf::Color(8, 153, 129);
+Theme Classic = {
+    sf::Color::White,
+    sf::Color::Red,
+    sf::Color::Green,
+    sf::Color::Black
+};
+
+Theme Light = {
+    sf::Color::White,
+    sf::Color::Red,
+    sf::Color::Green,
+    sf::Color::Black
+};
+
+Theme Dark = {
+    sf::Color(30, 30, 30),
+    sf::Color::Red,
+    sf::Color::Green,
+    sf::Color::White
+};
+
+
+Theme Nature = {
+    sf::Color(193, 228, 170),
+    sf::Color::Red,
+    sf::Color::Green,
+    sf::Color::Black
+};
+
+Theme Vintage = {
+    sf::Color(250, 235, 215),
+    sf::Color::Red,
+    sf::Color::Green,
+    sf::Color::Black
+};
+
 
 static bool collision_point(sf::RectangleShape& rect, float x_point, float y_point)
 {
@@ -12,11 +44,11 @@ static bool collision_point(sf::RectangleShape& rect, float x_point, float y_poi
 
 
 graphique::graphique(float x, float y, float width, float height, OHLCV _data) :
-    data(_data)
+    data(_data), color_theme(Vintage)
     {
         this->rect.setPosition(sf::Vector2f(x, y));
         this->rect.setSize(sf::Vector2f(width, height));
-        this->rect.setFillColor(WHITE);
+        this->rect.setFillColor(this->color_theme.background);
         this->create_candles();
         this->shadow.setPrimitiveType(sf::Lines);
     }
@@ -71,7 +103,7 @@ void graphique::create_candles()
         }
 
         for (size_t i = 0; i < size; ++i) {
-            auto color = this->data.open[i] < this->data.close[i] ? sf::Color(8, 153, 129) : sf::Color(242, 54, 69);
+            auto color = this->data.open[i] < this->data.close[i] ? this->color_theme.body_up : this->color_theme.body_down;
 
             double hauteur = (this->data.close[i] - this->data.open[i]) * (y_frame / diff_opp);
             int x = i * (x_frame / size) + (x_frame / size) / 2 - largeur / 2 + 10;
@@ -91,9 +123,17 @@ void graphique::create_candles()
             }
 
             sf::RectangleShape rectangle(sf::Vector2f(largeur, hauteur));
-            rectangle.setPosition(x, y);
+            rectangle.setPosition(float(x), float(y));
             rectangle.setFillColor(color);
+            rectangle.setOutlineThickness(-1);
+            rectangle.setOutlineColor(this->color_theme.border);
             this->body.push_back(rectangle);
         }
     }
+}
+
+void graphique::set_theme(Theme color_theme)
+{
+    this->color_theme = color_theme;
+    this->rect.setFillColor(color_theme.background);
 }

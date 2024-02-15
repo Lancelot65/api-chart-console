@@ -9,6 +9,16 @@
 #include <algorithm>
 #include <iostream>
 
+struct Theme
+{
+    sf::Color background;
+    sf::Color body_down;
+    sf::Color body_up;
+    sf::Color border;
+};
+
+extern Theme Dark;
+
 class graphique
 {
 private:
@@ -17,6 +27,8 @@ private:
 
     std::vector<sf::RectangleShape> body;
     sf::VertexArray shadow;
+
+    Theme color_theme;
 
     int last_width = 0;
 public:
@@ -29,6 +41,8 @@ public:
     bool collide(float x, float y);
 
     void create_candles();
+
+    void set_theme(Theme color_theme);
 };
 
 
